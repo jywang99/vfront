@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import { resetAxios, setAxios } from './api'
+import { resetAxios, setSaxio } from './api'
 
 /**
  * @typedef {{ token: string, name: string }} User
@@ -15,6 +15,6 @@ localUser.subscribe(value => {
     return
   }
   localStorage.user = JSON.stringify(value)
-  setAxios(value.token)
+  setSaxio(value.token)
 })
 

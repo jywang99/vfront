@@ -15,7 +15,7 @@ export let saxio = null;
  * 
  * @param {string} token
  */
-export function setAxios(token) {
+export function setSaxio(token) {
   saxio = axios.create({
     baseURL: PUBLIC_API_URL,
     headers: {
