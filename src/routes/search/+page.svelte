@@ -2,7 +2,7 @@
   import { saxio } from "$lib/api";
   import { onMount } from "svelte";
   import Entry from "./Entry.svelte";
-  import Paging from "./Paging.svelte";
+  import Paging from "$lib/Paging.svelte";
 
   /** @typedef
     * {{
@@ -18,7 +18,7 @@
     * @typedef {import("axios").AxiosResponse<EntrySearch>} EntryResponse
     */
 
-  // search form
+  // search parameters
   /** @type {string} */
   let keyword = '';
   /** @type {number[]} */
@@ -27,7 +27,6 @@
   let tagIds = [];
   /** @type {number[]} */
   let castIds = [];
-
   // pagination
   /** @type {import('$lib/api').PagingOpts} */
   const defaultPaging = {
@@ -36,7 +35,7 @@
     offset: 0,
     getTotal: true,
   };
-  let paging = defaultPaging;
+  let paging = structuredClone(defaultPaging);
 
   // search results
   /** @type {import('$lib/api').EntryMeta[]} */
@@ -45,17 +44,14 @@
   let casts = [];
   /** @type {import('$lib/api').Tag[]} */
   let tags = [];
-  /** @type {number} */
+  // pagination
   let total = 0;
-  /** @type {number} */
   let grandTotal = 0;
-  let pageSize = paging.pageSize;
-  let offset = paging.offset;
 
   /** @param {boolean} resetPaging */
   function searchEntries(resetPaging) {
     entries = [];
-    if (resetPaging) paging = defaultPaging;
+    if (resetPaging) paging = structuredClone(defaultPaging);
     saxio?.post('/entry', {
       keyword,
       parents,
@@ -68,7 +64,12 @@
       casts = data.casts;
       tags = data.tags;
       total = data.entries.length;
-      grandTotal = data.paging.total;
+
+      // get total count from the first response only
+      if (data.paging?.total !== undefined) {
+        grandTotal = data.paging.total;
+        paging.getTotal = false;
+      }
     }).catch(/** @param {AxiosError} err */ (err) => {
       console.error(err);
     });
@@ -100,14 +101,16 @@
   <button type="submit">Submit</button>
 </form>
 
-{#each entries as entry}
-  <Entry {entry} />
-{/each}
-
 {#if grandTotal > 0}
-  <Paging {offset} {grandTotal} {pageSize} onPageChange={(n) => {
+  {#each entries as entry}
+    <Entry {entry} />
+  {/each}
+
+  <Paging bind:offset={paging.offset} bind:grandTotal bind:pageSize={paging.pageSize} onOffsetChange={(n) => {
     paging.offset = n;
     searchEntries(false);
   }} />
+{:else}
+  <p>No entries found.</p>
 {/if}
 

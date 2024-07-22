@@ -12,6 +12,7 @@
   /** @type {string[]} */
   let dynamicUrls = [];
 
+  let staticReady = false;
   let dynamic = false;
   let dynamicReady = false;
 
@@ -21,6 +22,7 @@
     }).then((res) => {
       const url = URL.createObjectURL(res.data);
       staticThumb.src = url;
+      staticReady = true;
     }).catch((err) => {
       console.error(err);
     });
@@ -46,10 +48,10 @@
 
 <a class="entry" href={`/entry/${entry.id}`}>
   <div class="thumbWrap" on:mouseenter={() => dynamic = true} on:mouseleave={() => dynamic = false} role="region" aria-label="Hoverable region">
-    <img bind:this={staticThumb} class:hidden={dynamic && dynamicReady} alt="thumbStatic" />
+    <img bind:this={staticThumb} class:hidden={dynamic && dynamicReady || !staticReady} alt="thumbStatic" />
     <img bind:this={dynamicThumb} class:hidden={!dynamic || !dynamicReady} alt="thumbDynamic" />
   </div>
-  <h3>{entry.name}</h3>
+  <p>{entry.name}</p>
   {#if entry.desc}
     <p>{entry.desc}</p>
   {/if}
@@ -62,6 +64,12 @@
     text-decoration: none;
     color: black;
     max-width: 200px;
+  }
+
+  .entry p {
+    margin: 0;
+    margin-top: 0.5rem;
+    overflow: hidden;
   }
 
   .thumbWrap {

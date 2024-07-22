@@ -1,8 +1,9 @@
 <script>
   import { saxio } from "$lib/api";
   import { onMount } from 'svelte';
-  import { PUBLIC_API_URL } from "$env/static/public";
   import Meta from "./Meta.svelte";
+  import MultiViewer from "./MultiViewer.svelte";
+  import Viewer from "./Viewer.svelte";
 
   /** @type {import('$lib/api').Entry | null } */
   let data = null;
@@ -44,16 +45,9 @@
   <Meta meta={data.meta} />
   
   {#if data.files}
-    <ul>
-      {#each data.files as file}
-        <li><a href={file}>{file}</a></li>
-      {/each}
-    </ul>
+    <MultiViewer entryId={data.meta.id} files={data.files} />
   {:else}
-    <video controls>
-      <track kind="captions" />
-      <source src={`${PUBLIC_API_URL}/media/stream/${data.meta.id}`} type="video/mp4" />
-    </video>
+    <Viewer entryId={data.meta.id} filename={data.path} />
   {/if}
 {:else}
   <p>Loading...</p>

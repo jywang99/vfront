@@ -6,17 +6,25 @@
   /** @type {number} */
   export let pageSize;
 
-  let current = offset / pageSize + 1;
-  let total = Math.ceil(grandTotal / pageSize);
+  const RADIUS = 4;
+
+  /** @type {number} */
+  let current; // 1-based
+  /** @type {number} */
+  let total;
+  $: {
+    current = offset / pageSize + 1;
+    total = Math.ceil(grandTotal / pageSize);
+  }
 
   let abbrevBefore = false;
   /** @type {number[]} */
   let beforePgs = [];
   $: {
-    abbrevBefore = current > 5;
+    abbrevBefore = current > RADIUS + 2;
     beforePgs = [];
     if (abbrevBefore) {
-      for (let i = current - 5; i < current; i++) {
+      for (let i = current - RADIUS; i < current; i++) {
         beforePgs.push(i);
       }
     } else {
@@ -30,10 +38,10 @@
   /** @type {number[]} */
   let afterPgs = [];
   $: {
-    abbrevAfter = total - current > 5;
+    abbrevAfter = total - current > RADIUS + 1;
     afterPgs = [];
     if (abbrevAfter) {
-      for (let i = current + 1; i <= current + 5; i++) {
+      for (let i = current + 1; i <= current + RADIUS; i++) {
         afterPgs.push(i);
       }
     } else {
@@ -44,15 +52,18 @@
   }
 
   /** @type {(offset: number) => void} */
-  export let onPageChange;
+  export let onOffsetChange;
+  /** @param {number} pg */
+  function onPageChange(pg) {
+    onOffsetChange((pg - 1) * pageSize);
+  }
 </script>
 
 <nav aria-label="Page navigation">
   <ul class="pagination">
     <li class="page-item">
-      <button class="page-link" aria-label="Previous" aria-disabled={current === 1} on:click={() => {
-        current = current - 1;
-        onPageChange((current - 1) * pageSize);
+      <button class="page-link" aria-label="Previous" disabled={current === 1} on:click={() => {
+        onPageChange(current - 1);
       }}>
         <span aria-hidden="true">&laquo;</span>
       </button>
@@ -61,8 +72,7 @@
     {#if abbrevBefore}
       <li class="page-item">
         <button class="page-link" on:click={() => {
-          current = 1;
-          onPageChange(0);
+          onPageChange(1);
         }}>1</button>
       </li>
       <li class="page-item">
@@ -73,8 +83,7 @@
     {#each beforePgs as pg}
       <li class="page-item">
         <button class="page-link" on:click={() => {
-          current = pg;
-          onPageChange((pg - 1) * pageSize);
+          onPageChange(pg);
         }}>{pg}</button>
       </li>
     {/each}
@@ -86,8 +95,7 @@
     {#each afterPgs as pg}
       <li class="page-item">
         <button class="page-link" on:click={() => {
-          current = pg;
-          onPageChange((pg - 1) * pageSize);
+          onPageChange(pg);
         }}>{pg}</button>
       </li>
     {/each}
@@ -98,16 +106,14 @@
       </li>
       <li class="page-item">
         <button class="page-link" on:click={() => {
-          current = total;
-          onPageChange((total - 1) * pageSize);
+          onPageChange(total);
         }}>{total}</button>
       </li>
     {/if}
 
     <li class="page-item">
-      <button class="page-link" aria-label="Next" aria-disabled={current === total} on:click={() => {
-        current = current + 1;
-        onPageChange(current * pageSize);
+      <button class="page-link" aria-label="Next" disabled={current === total} on:click={() => {
+        onPageChange(current + 1);
       }}>
         <span aria-hidden="true">&raquo;</span>
       </button>

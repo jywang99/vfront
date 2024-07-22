@@ -19,6 +19,5 @@
   <button on:click={() => localUser.set(null)}>Logout</button>
 {/if}
 
-
 <slot />
 
