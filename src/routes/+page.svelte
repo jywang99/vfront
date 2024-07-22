@@ -1,7 +1,7 @@
 <script>
   import { localUser } from "$lib/storable";
 
-  /** import("$lib/storable").User | null */
+  /** @type import("$lib/storable").User | null */
   let user = null;
   let loggedIn = false;
   localUser.subscribe((value) => {
@@ -10,7 +10,7 @@
   });
 </script>
 
-<h1>Welcome{loggedIn ? `, ${user.name}` : ''}</h1>
+<h1>Welcome{loggedIn ? `, ${user?.name}` : ''}</h1>
 {#if !loggedIn}
   <a href="/login">Login</a>
   <br />
@@ -18,4 +18,7 @@
 {:else}
   <button on:click={() => localUser.set(null)}>Logout</button>
 {/if}
+
+
+<slot />
 
