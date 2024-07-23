@@ -40,7 +40,7 @@ export function resetAxios() {
   */
 
 /** @typedef
-  * {{ id: number, name: string, desc: string, created: string, parent: number }}
+  * {{ id: number, name: string, desc?: string, created: string, parent?: number }}
   * Collection
   */
 

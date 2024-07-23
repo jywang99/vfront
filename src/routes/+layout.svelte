@@ -19,3 +19,12 @@
 
 <slot />
 
+<style>
+  nav {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: .5rem;
+    margin-bottom: .5rem;
+  }
+</style>
+

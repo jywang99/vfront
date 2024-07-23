@@ -59,17 +59,17 @@
 
 <style>
   .entry {
-    display: inline-block;
-    margin: 1rem;
     text-decoration: none;
     color: black;
-    max-width: 200px;
+    max-width: 180px;
   }
 
   .entry p {
     margin: 0;
-    margin-top: 0.5rem;
     overflow: hidden;
+    font-weight: bold;
+    height: 2em;
+    line-height: 1rem;
   }
 
   .thumbWrap {

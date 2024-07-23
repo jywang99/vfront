@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import Entry from "./Entry.svelte";
   import Paging from "$lib/Paging.svelte";
+  import ParentPicker from "./ParentPicker.svelte";
 
   /** @typedef
     * {{
@@ -21,7 +22,7 @@
   // search parameters
   /** @type {string} */
   let keyword = '';
-  /** @type {number[]} */
+  /** @type {import('$lib/api').Collection[]} */
   let parents = [];
   /** @type {number[]} */
   let tagIds = [];
@@ -54,7 +55,7 @@
     if (resetPaging) paging = structuredClone(defaultPaging);
     saxio?.post('/entry', {
       keyword,
-      parents,
+      parents: parents.map((p) => p.id),
       tagIds,
       castIds,
       paging,
@@ -83,14 +84,19 @@
     paging = defaultPaging;
     searchEntries(true);
   }
+
+  /** @param {number} n */
+  function onOffsetChange(n) {
+    paging.offset = n;
+    searchEntries(false);
+  }
 </script>
 
-<form on:submit={handleSubmit}>
+<form id="entryForm" on:submit={handleSubmit}>
   <label for="entryKey">Keyword</label>
   <input type="text" id="entryKey" bind:value={keyword} />
 
-  <label for="parents">Parents</label>
-  <input type="text" id="parents" bind:value={parents} />
+  <ParentPicker bind:chosen={parents} />
 
   <label for="tagIds">Tag IDs</label>
   <input type="text" id="tagIds" bind:value={tagIds} />
@@ -102,15 +108,27 @@
 </form>
 
 {#if grandTotal > 0}
-  {#each entries as entry}
-    <Entry {entry} />
-  {/each}
+  <div class="entries">
+    {#each entries as entry}
+      <Entry {entry} />
+    {/each}
+  </div>
 
-  <Paging bind:offset={paging.offset} bind:grandTotal bind:pageSize={paging.pageSize} onOffsetChange={(n) => {
-    paging.offset = n;
-    searchEntries(false);
-  }} />
+  <Paging bind:offset={paging.offset} bind:grandTotal bind:pageSize={paging.pageSize} {onOffsetChange} />
 {:else}
   <p>No entries found.</p>
 {/if}
+
+<style>
+  #entryForm {
+    margin-bottom: 1.5rem;
+  }
+
+  .entries {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 0fr));
+    gap: .5rem;
+    justify-content: center;
+  }
+</style>
 

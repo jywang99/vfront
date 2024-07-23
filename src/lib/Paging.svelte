@@ -5,8 +5,7 @@
   export let grandTotal;
   /** @type {number} */
   export let pageSize;
-
-  const RADIUS = 4;
+  export let radius = 4;
 
   /** @type {number} */
   let current; // 1-based
@@ -21,10 +20,10 @@
   /** @type {number[]} */
   let beforePgs = [];
   $: {
-    abbrevBefore = current > RADIUS + 2;
+    abbrevBefore = current > radius + 2;
     beforePgs = [];
     if (abbrevBefore) {
-      for (let i = current - RADIUS; i < current; i++) {
+      for (let i = current - radius; i < current; i++) {
         beforePgs.push(i);
       }
     } else {
@@ -38,10 +37,10 @@
   /** @type {number[]} */
   let afterPgs = [];
   $: {
-    abbrevAfter = total - current > RADIUS + 1;
+    abbrevAfter = total - current > radius + 1;
     afterPgs = [];
     if (abbrevAfter) {
-      for (let i = current + 1; i <= current + RADIUS; i++) {
+      for (let i = current + 1; i <= current + radius; i++) {
         afterPgs.push(i);
       }
     } else {
@@ -59,67 +58,65 @@
   }
 </script>
 
-<nav aria-label="Page navigation">
-  <ul class="pagination">
+<ul class="pagination">
+  <li class="page-item">
+    <button class="page-link" aria-label="Previous" disabled={current === 1} on:click={() => {
+      onPageChange(current - 1);
+    }}>
+      <span aria-hidden="true">&laquo;</span>
+    </button>
+  </li>
+
+  {#if abbrevBefore}
     <li class="page-item">
-      <button class="page-link" aria-label="Previous" disabled={current === 1} on:click={() => {
-        onPageChange(current - 1);
-      }}>
-        <span aria-hidden="true">&laquo;</span>
-      </button>
+      <button class="page-link" on:click={() => {
+        onPageChange(1);
+      }}>1</button>
     </li>
-
-    {#if abbrevBefore}
-      <li class="page-item">
-        <button class="page-link" on:click={() => {
-          onPageChange(1);
-        }}>1</button>
-      </li>
-      <li class="page-item">
-        <button class="page-link">...</button>
-      </li>
-    {/if}
-
-    {#each beforePgs as pg}
-      <li class="page-item">
-        <button class="page-link" on:click={() => {
-          onPageChange(pg);
-        }}>{pg}</button>
-      </li>
-    {/each}
-
     <li class="page-item">
-      <button class="page-link active">{current}</button>
+      <button class="page-link">...</button>
     </li>
+  {/if}
 
-    {#each afterPgs as pg}
-      <li class="page-item">
-        <button class="page-link" on:click={() => {
-          onPageChange(pg);
-        }}>{pg}</button>
-      </li>
-    {/each}
-
-    {#if abbrevAfter}
-      <li class="page-item">
-        <button class="page-link">...</button>
-      </li>
-      <li class="page-item">
-        <button class="page-link" on:click={() => {
-          onPageChange(total);
-        }}>{total}</button>
-      </li>
-    {/if}
-
+  {#each beforePgs as pg}
     <li class="page-item">
-      <button class="page-link" aria-label="Next" disabled={current === total} on:click={() => {
-        onPageChange(current + 1);
-      }}>
-        <span aria-hidden="true">&raquo;</span>
-      </button>
+      <button class="page-link" on:click={() => {
+        onPageChange(pg);
+      }}>{pg}</button>
     </li>
-  </ul>
-</nav>
+  {/each}
+
+  <li class="page-item">
+    <button class="page-link active">{current}</button>
+  </li>
+
+  {#each afterPgs as pg}
+    <li class="page-item">
+      <button class="page-link" on:click={() => {
+        onPageChange(pg);
+      }}>{pg}</button>
+    </li>
+  {/each}
+
+  {#if abbrevAfter}
+    <li class="page-item">
+      <button class="page-link">...</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link" on:click={() => {
+        onPageChange(total);
+      }}>{total}</button>
+    </li>
+  {/if}
+
+  <li class="page-item">
+    <button class="page-link" aria-label="Next" disabled={current === total} on:click={() => {
+      onPageChange(current + 1);
+    }}>
+      <span aria-hidden="true">&raquo;</span>
+    </button>
+  </li>
+</ul>
 
 <style>
   .pagination {
@@ -129,7 +126,6 @@
 
   .page-item {
     display: inline-block;
-    margin: 0.5rem;
   }
 
   .page-link {
@@ -139,5 +135,13 @@
 
   .active {
     font-weight: bold;
+    background-color: lightgrey;
+  }
+
+  button {
+    background: none;
+    cursor: pointer;
+    border: 1px solid grey;
+    padding: .5rem;
   }
 </style>
