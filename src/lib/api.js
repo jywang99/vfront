@@ -39,19 +39,22 @@ export function resetAxios() {
   * Entry
   */
 
-/** @typedef
+/**
+  * @typedef
+  * {{ id: number, name: string, img?: string }}
+  * PickerItemType
+  */
+
+/** @typedef {PickerItemType} Collection 
   * {{ id: number, name: string, desc?: string, created: string, parent?: number }}
-  * Collection
   */
 
-/** @typedef
+/** @typedef {PickerItemType} Tag
   * {{ id: number, name: string }}
-  * Tag
   */
 
-/** @typedef
+/** @typedef {PickerItemType} Cast
   * {{ id: number, name: string, pic: string }}
-  * Cast
   */
 
 /** @typedef

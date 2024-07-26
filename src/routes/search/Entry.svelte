@@ -17,6 +17,7 @@
   let dynamicReady = false;
 
   onMount(() => {
+    if (!entry.thumbStatic) return;
     saxio?.get(`/gallery/thumb?path=${encodeURIComponent(entry.thumbStatic)}`, {
       responseType: 'blob',
     }).then((res) => {
@@ -28,7 +29,7 @@
     });
   })
 
-  $: if (dynamic && !dynamicReady) {
+  $: if (dynamic && !dynamicReady && entry.thumbDynamic) {
     entry.thumbDynamic.forEach((path) => {
       saxio?.get(`/gallery/thumb?path=${encodeURIComponent(path)}`, {
         responseType: 'blob',
