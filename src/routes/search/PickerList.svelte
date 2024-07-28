@@ -2,7 +2,7 @@
   import PickerItem from "./PickerItem.svelte";
 
   export let title;
-  /** @type {PickerItem[]} */
+  /** @type {import('$lib/api').PickerItemType[]} */
   export let itemList;
   export let onPick;
   export let focused;

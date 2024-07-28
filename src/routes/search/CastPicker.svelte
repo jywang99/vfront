@@ -8,25 +8,48 @@
   export let chosen;
   /** @type {Cast[]} */
   let fetched = [];
+  let fetching = false;
+  let chosenFetching = false;
 
   let keyword = '';
 
   const fetchCasts = debounce(() => {
+    fetching = true;
     saxio?.post('/cast', { keyword }).then(res => {
       fetched = res.data.casts;
     }).catch((err) => {
       console.error(err);
+    }).finally(() => {
+      fetching = false;
     });
   }, 300);
 
+  function fetchChosen() {
+    if (chosen.length === 0 || chosen[0].name) return;
+
+    chosenFetching = true;
+    saxio?.post('/cast/ids', { ids: chosen.map((c) => c.id) }).then(res => {
+      chosen = res.data;
+    }).catch((err) => {
+      console.error(err);
+    }).finally(() => {
+      chosenFetching = false;
+    });
+  }
+
+  function init() {
+    fetchCasts();
+    fetchChosen();
+  }
+
   const handleInput = () => {
     fetchCasts();
-    // TODO fetch info for chosen
   };
 </script>
 
 <Picker title="Casts" id="casts"
-  bind:fullList={(fetched)} bind:chosen={chosen} bind:keyword={keyword} initFunc={fetchCasts}
+  bind:fullList={(fetched)} bind:chosen={chosen} bind:keyword={keyword} initFunc={init}
+  bind:fullLoading={fetching} bind:chosenLoading={chosenFetching}
   handleInput={handleInput}
 />
 

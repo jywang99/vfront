@@ -66,6 +66,11 @@
     sParents = paramToArray('parents', (id) => ({ id: parseInt(id) }));
     sTags = paramToArray('tags', (id) => ({ id: parseInt(id) }));
     sCasts = paramToArray('casts', (id) => ({ id: parseInt(id) }));
+    if (params.has('offset')) {
+      // @ts-ignore
+      paging.offset = parseInt(params.get('offset'));
+    } else {
+    }
   }
   $: console.log(sParents, sTags, sCasts);
 
@@ -73,6 +78,8 @@
   function searchEntries(resetPaging) {
     entries = [];
     if (resetPaging) paging = structuredClone(defaultPaging);
+    upateSearchParams();
+
     saxio?.post('/entry', {
       keyword: sKeyword,
       parents: sParents.map((p) => p.id),
@@ -94,13 +101,46 @@
     }).catch(/** @param {AxiosError} err */ (err) => {
       console.error(err);
     });
+
+    /** 
+      * set array to URL search param
+      * @param {URL} url
+      * @param {string} param
+      * @param {any[]} arr
+      */
+    function setListParam(url, param, arr) {
+      if (arr.length === 0) {
+        url.searchParams.delete(param);
+        return;
+      }
+      url.searchParams.set(param, arr.map((p) => p.id).join(','));
+    }
     
-    // TODO update search params
+    function upateSearchParams() {
+      const url = new URL(location.href);
+      if (sKeyword) { 
+        url.searchParams.set('keyword', sKeyword); 
+      } else { 
+        url.searchParams.delete('keyword');
+      }
+
+      setListParam(url, 'parents', sParents);
+      setListParam(url, 'tags', sTags);
+      setListParam(url, 'casts', sCasts);
+
+      if (paging.offset > 0) {
+        url.searchParams.set('offset', paging.offset.toString());
+      } else {
+        url.searchParams.delete('offset');
+      }
+
+      goto(url.toString(), { replaceState: true });
+    }
   }
 
   onMount(() => {
     initParams();
-    searchEntries(true)
+    searchEntries(false)
   })
 
   function handleSubmit() {

@@ -2,15 +2,19 @@
   import PickerItem from "./PickerItem.svelte";
   import PickerList from "./PickerList.svelte";
 
+  /** @typedef {import('$lib/api').PickerItemType} PickerItemType */
+
   /** @type {string} */
   export let title;
   /** @type {string} */
   export let id;
 
-  /** @type {PickerItem[]} */
+  /** @type {PickerItemType[]} */
   export let fullList;
-  /** @type {PickerItem[]} */
+  /** @type {PickerItemType[]} */
   export let chosen;
+  export let fullLoading = false;
+  export let chosenLoading = false;
 
   /** @type {string} */
   export let keyword;
@@ -29,15 +33,15 @@
     initFunc();
   }
 
-  /** @type {PickerItem[]} */
+  /** @type {PickerItemType[]} */
   let choosable;
-  $: if (chosen.length > 0) {
+  $: if (chosen && chosen.length > 0) {
     choosable = fullList.filter((item) => !chosen.some((c) => c.id === item.id));
   } else {
     choosable = fullList;
   }
 
-  /** @param {PickerItem} item */
+  /** @param {PickerItemType} item */
   function onChoose(item) {
     chosen = [...chosen, item];
   }
@@ -93,13 +97,22 @@
     <!-- dialog -->
     {#if inputFocused || dropFocused}
       <div class="dialog" on:mouseenter={() => dropFocused = true} on:mouseleave={() => dropFocused = false} role="dialog" >
-        <PickerList title="Choose from" bind:itemList={choosable} onPick={onChoose} focused={lFocus} />
-        <PickerList title="Chosen" bind:itemList={chosen} onPick={onUnchoose} focused={rFocus} canClear />
+        {#if fullLoading}
+          <div class="loading">Loading...</div>
+        {:else}
+          <PickerList title="Choose from" bind:itemList={choosable} onPick={onChoose} focused={lFocus} />
+        {/if}
+
+        {#if chosenLoading}
+          <div class="loading">Loading...</div>
+        {:else}
+          <PickerList title="Chosen" bind:itemList={chosen} onPick={onUnchoose} focused={rFocus} canClear />
+        {/if}
       </div>
     {/if}
 
     <!-- badge -->
-    {#if chosen.length > 0}
+    {#if chosen && chosen.length > 0}
       <span class="badge">{chosen.length}</span>
     {/if}
   </div>
