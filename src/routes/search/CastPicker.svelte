@@ -1,6 +1,5 @@
 <script>
   import { saxio } from '$lib/api';
-  import { debounce } from '$lib/util';
   import Picker from './Picker.svelte';
   /** @typedef {import('$lib/api').Cast} Cast */
 
@@ -13,7 +12,7 @@
 
   let keyword = '';
 
-  const fetchCasts = debounce(() => {
+  const fetchCasts = () => {
     fetching = true;
     saxio?.post('/cast', { keyword }).then(res => {
       fetched = res.data.casts;
@@ -22,7 +21,7 @@
     }).finally(() => {
       fetching = false;
     });
-  }, 300);
+  };
 
   function fetchChosen() {
     if (chosen.length === 0 || chosen[0].name) return;
@@ -41,15 +40,11 @@
     fetchCasts();
     fetchChosen();
   }
-
-  const handleInput = () => {
-    fetchCasts();
-  };
 </script>
 
 <Picker title="Casts" id="casts"
-  bind:fullList={(fetched)} bind:chosen={chosen} bind:keyword={keyword} initFunc={init}
+  bind:fullList={fetched} bind:chosen={chosen} bind:keyword={keyword} initFunc={init}
   bind:fullLoading={fetching} bind:chosenLoading={chosenFetching}
-  handleInput={handleInput}
+  handleInput={fetchCasts}
 />
 

@@ -1,4 +1,5 @@
 <script>
+  import { debounce } from "$lib/util";
   import PickerItem from "./PickerItem.svelte";
   import PickerList from "./PickerList.svelte";
 
@@ -21,6 +22,7 @@
 
   /** @type {() => void} */
   export let handleInput;
+  const dHandleInput = debounce(handleInput, 300);
 
   let inputFocused = false;
   let dropFocused = false;
@@ -91,7 +93,7 @@
   <label for={id}>{title}</label>
   <div class="input-wrap">
     <!-- input -->
-    <input type="text" {id} bind:value={keyword} on:input={handleInput} on:keydown={onKeyDown}
+    <input type="text" {id} bind:value={keyword} on:input={() => dHandleInput()} on:keydown={onKeyDown}
       on:focusin={() => inputFocused = true} on:focusout={() => inputFocused = false} />
 
     <!-- dialog -->

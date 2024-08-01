@@ -1,6 +1,5 @@
 <script>
   import { saxio } from '$lib/api';
-  import { debounce } from '$lib/util';
   import Picker from './Picker.svelte';
   /** @typedef {import('$lib/api').Collection} Collection */
 
@@ -13,7 +12,7 @@
 
   let keyword = '';
 
-  const fetchCollections = debounce(() => {
+  const fetchCollections = () => {
     fetching = true;
     saxio?.post('/collection', { keyword }).then(res => {
       fetched = res.data.collections;
@@ -22,7 +21,7 @@
     }).finally(() => {
       fetching = false;
     });
-  }, 300);
+  };
 
   function fetchChosen() {
     if (chosen.length === 0 || chosen[0].name) return;
@@ -41,16 +40,10 @@
     fetchCollections();
     fetchChosen();
   }
-
-  const handleInput = () => {
-    fetchCollections();
-    // TODO fetch info for chosen
-  };
-
 </script>
 
 <Picker title="Collections" id="collections"
   bind:fullList={fetched} bind:chosen={chosen} bind:keyword={keyword} initFunc={init}
-  handleInput={handleInput}
+  handleInput={fetchCollections}
 />
 
