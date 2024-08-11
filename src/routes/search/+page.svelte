@@ -72,7 +72,6 @@
     } else {
     }
   }
-  $: console.log(sParents, sTags, sCasts);
 
   /** @param {boolean} resetPaging */
   function searchEntries(resetPaging) {

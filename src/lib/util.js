@@ -17,3 +17,28 @@ export const debounce = (callback, wait = 300) => {
   };
 };
 
+/** 
+  * Dispatch event on click outside of node 
+  *
+  * @param {HTMLElement} node - The node to check if click is outside
+  */
+export function clickOutside(node) {
+  /** @ts-ignore */
+  const handleClick = event => {
+    if (node && !node.contains(event.target) && !event.defaultPrevented) {
+      node.dispatchEvent(
+        /** @ts-ignore */
+        new CustomEvent('click_outside', node)
+      )
+    }
+  }
+
+	document.addEventListener('click', handleClick, true);
+  
+  return {
+    destroy() {
+      document.removeEventListener('click', handleClick, true);
+    }
+	}
+}
+

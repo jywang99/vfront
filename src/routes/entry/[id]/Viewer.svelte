@@ -12,7 +12,7 @@
 
 <div class="container">
   {#if type === 'mp4' || type === 'webm'}
-    <video controls autoplay>
+    <video controls>
       <track kind="captions" />
       <source src={src} />
     </video>

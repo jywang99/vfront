@@ -17,7 +17,6 @@
     const name = formData.get('nickname');
 
     axio.post('/regist', { email, password, name }).then((res) => {
-      console.log(res);
       if (alert('Sign up success') == undefined) {
         window.location.href = '/login';
       }
