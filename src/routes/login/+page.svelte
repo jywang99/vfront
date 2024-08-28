@@ -1,6 +1,6 @@
 <script>
   import { axio } from "$lib/api";
-    import { localUser } from "$lib/storable";
+  import { localUser } from "$lib/storable";
 
   /**
    * @param {SubmitEvent} event

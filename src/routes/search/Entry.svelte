@@ -53,9 +53,6 @@
     <img bind:this={dynamicThumb} class:hidden={!dynamic || !dynamicReady} alt="thumbDynamic" />
   </div>
   <p>{entry.name}</p>
-  {#if entry.desc}
-    <p>{entry.desc}</p>
-  {/if}
 </a>
 
 <style>

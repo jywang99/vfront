@@ -8,6 +8,8 @@
   import ParentPicker from "./ParentPicker.svelte";
   import TagPicker from "./TagPicker.svelte";
   import CastPicker from "./CastPicker.svelte";
+  import Tag from "./tag.svelte";
+  import Cast from "./cast.svelte";
 
   /** @typedef {import('$lib/api').Collection} Collection
     * @typedef {import('$lib/api').Tag} Tag
@@ -147,6 +149,15 @@
     searchEntries(true);
   }
 
+  // detect changes in URL
+  $: {
+    const url = new URL(location.href);
+    if (url.search !== $page.url.search) {
+      initParams();
+      searchEntries(false);
+    }
+  }
+
   // search results
   /** @type {import('$lib/api').EntryMeta[]} */
   let entries = [];
@@ -186,9 +197,23 @@
 </form>
 
 {#if grandTotal > 0}
-  <div class="entries">
+  <Paging bind:offset={paging.offset} bind:grandTotal bind:pageSize={paging.pageSize} {onOffsetChange} />
+
+  <div class="entries section">
     {#each entries as entry}
       <Entry {entry} />
+    {/each}
+  </div>
+
+  <div class="tags section">
+    {#each tags as tag}
+      <Tag {tag} />
+    {/each}
+  </div>
+
+  <div class="casts section">
+    {#each casts as cast}
+      <Cast {cast} />
     {/each}
   </div>
 
@@ -207,6 +232,20 @@
     grid-template-columns: repeat(auto-fill, minmax(180px, 0fr));
     gap: .5rem;
     justify-content: center;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .casts {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .section {
+    margin-bottom: 1.5rem;
   }
 </style>
 

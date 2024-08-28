@@ -19,44 +19,44 @@
 
   /** @param {KeyboardEvent} e */
   function handleKeyDown(e) {
-     switch(e.key) {
-       case 'i':
-       case 'Escape':
-         focused = false;
-         break;
-       case 'k':
-       case 'ArrowUp':
-         if (focusIdx > 0) {
-           focusIdx--;
-         } else {
-           focusIdx = itemList.length - 1;
-         }
-         break;
-       case 'j':
-       case 'ArrowDown':
-         if (focusIdx < itemList.length - 1) {
-           focusIdx++;
-         } else {
-           focusIdx = 0;
-         }
-         break;
-       case 'l':
-       case 'h':
-       case 'ArrowRight':
-       case 'ArrowLeft':
-         switchSide();
-         break;
-       case 'Enter':
-         onPick(itemList[focusIdx]);
-         break;
-       case 'c':
-         if (canClear) itemList = [];
-         break;
-       case 'Tab':
-         break;
-       default:
-         return;
-     }
+    switch(e.key) {
+      case 'i':
+      case 'Escape':
+        focused = false;
+        break;
+      case 'k':
+      case 'ArrowUp':
+        if (focusIdx > 0) {
+          focusIdx--;
+        } else {
+          focusIdx = itemList.length - 1;
+        }
+        break;
+      case 'j':
+      case 'ArrowDown':
+        if (focusIdx < itemList.length - 1) {
+          focusIdx++;
+        } else {
+          focusIdx = 0;
+        }
+        break;
+      case 'l':
+      case 'h':
+      case 'ArrowRight':
+      case 'ArrowLeft':
+        switchSide();
+        break;
+      case 'Enter':
+        onPick(itemList[focusIdx]);
+        break;
+      case 'c':
+        if (canClear) itemList = [];
+        break;
+      case 'Tab':
+        break;
+      default:
+        return;
+    }
 
      // only for the handled keys
      e.preventDefault();

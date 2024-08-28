@@ -54,7 +54,7 @@
 
   let lFocus = false, rFocus = false, iFocus = true;
   /** @type {HTMLInputElement} */
-  export let inputEle;
+  let inputEle;
   // restore focus to input
   $: if (!lFocus && !rFocus && !iFocus) {
     iFocus = true;
