@@ -205,17 +205,21 @@
     {/each}
   </div>
 
-  <div class="tags section">
-    {#each tags as tag}
-      <Tag {tag} />
-    {/each}
-  </div>
+  {#if tags && tags.length > 0}
+    <div class="tags section">
+      {#each tags as tag}
+        <Tag {tag} />
+      {/each}
+    </div>
+  {/if}
 
-  <div class="casts section">
-    {#each casts as cast}
-      <Cast {cast} />
-    {/each}
-  </div>
+  {#if casts && casts.length > 0}
+    <div class="casts section">
+      {#each casts as cast}
+        <Cast {cast} />
+      {/each}
+    </div>
+  {/if}
 
   <Paging bind:offset={paging.offset} bind:grandTotal bind:pageSize={paging.pageSize} {onOffsetChange} />
 {:else}
