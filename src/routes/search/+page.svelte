@@ -188,9 +188,9 @@
   <label for="entryKey">Keyword</label>
   <input type="text" id="entryKey" bind:value={sKeyword} />
 
-  <ParentPicker bind:chosen={sParents} />
-  <TagPicker bind:chosen={sTags} />
-  <CastPicker bind:chosen={sCasts} />
+  <ParentPicker bind:chosen={sParents} submit={handleSubmit} />
+  <TagPicker bind:chosen={sTags} submit={handleSubmit} />
+  <CastPicker bind:chosen={sCasts} submit={handleSubmit} />
 
   <button type="button" on:click={handleSubmit}>Search</button>
   <button type="button" on:click={clearSearch}>Clear</button>

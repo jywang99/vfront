@@ -5,6 +5,7 @@
 
   /** @type {Collection[]} */
   export let chosen;
+  export let submit;
   /** @type {Collection[]} */
   let fetched = [];
   let fetching = false;
@@ -45,5 +46,6 @@
 <Picker title="Collections" id="collections"
   bind:fullList={fetched} bind:chosen={chosen} bind:keyword={keyword} initFunc={init}
   handleInput={fetchCollections}
+  submit={submit}
 />
 

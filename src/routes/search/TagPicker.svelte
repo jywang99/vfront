@@ -5,6 +5,7 @@
 
   /** @type {Tag[]} */
   export let chosen;
+  export let submit;
   /** @type {Tag[]} */
   let fetched = [];
   let fetching = false;
@@ -46,5 +47,6 @@
   bind:fullList={fetched} bind:chosen={chosen} bind:keyword={keyword} initFunc={init}
   bind:fullLoading={fetching} bind:chosenLoading={chosenFetching}
   handleInput={fetchTags}
+  submit={submit}
 />
 

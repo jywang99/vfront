@@ -34,6 +34,9 @@
     initFunc();
   }
 
+  /** @type {() => void} */
+  export let submit;
+
   /** @type {PickerItemType[]} */
   let choosable;
   $: if (chosen && chosen.length > 0) {
@@ -69,26 +72,30 @@
 
   /** @param {KeyboardEvent} e */
   function onKeyDown(e) {
-     // only allow typing when input is focused
-     if (!iFocus) e.preventDefault();
-     focused = true;
+    // only allow typing when input is focused
+    if (!iFocus) e.preventDefault();
+    focused = true;
 
-     switch(e.key) {
-       case 'Enter':
-       case 'ArrowDown':
-         if (iFocus) {
-           lFocus = true;
-           iFocus = false;
-         }
-         break;
-       case 'Tab':
-       case 'Escape':
-         // release focus from this component
-         unfocus();
-         break;
-       default:
-         break;
-     }
+    switch(e.key) {
+      case 'Enter':
+        if (e.ctrlKey) {
+          submit();
+          break;
+        }
+      case 'ArrowDown':
+        if (iFocus) {
+          lFocus = true;
+          iFocus = false;
+        }
+        break;
+      case 'Tab':
+      case 'Escape':
+        // release focus from this component
+        unfocus();
+        break;
+      default:
+        break;
+    }
   }
 
   function switchSide() {
