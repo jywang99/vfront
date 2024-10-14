@@ -1,8 +1,8 @@
 import axios from "axios";
-import { PUBLIC_API_URL } from "$env/static/public";
+import { env } from '$env/dynamic/public'
 
 export const axio = axios.create({
-  baseURL: PUBLIC_API_URL,
+  baseURL: env.PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -17,7 +17,7 @@ export let saxio = null;
  */
 export function setSaxio(token) {
   saxio = axios.create({
-    baseURL: PUBLIC_API_URL,
+    baseURL: env.PUBLIC_API_URL,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',

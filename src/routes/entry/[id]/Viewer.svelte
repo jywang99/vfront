@@ -1,5 +1,5 @@
 <script>
-  import { PUBLIC_API_URL } from "$env/static/public";
+  import { env } from '$env/dynamic/public'
 
   export let entryId;
   export let filename;
@@ -7,7 +7,7 @@
 
   // TODO refine
   $: type = filename.split('.').pop();
-  $: src = `${PUBLIC_API_URL}/media/${type === 'mp4' || type === 'webm' ? 'stream' : 'static'}/${entryId}${param ? '?file=' + filename : ''}`;
+  $: src = `${env.PUBLIC_API_URL}/media/${type === 'mp4' || type === 'webm' ? 'stream' : 'static'}/${entryId}${param ? '?file=' + filename : ''}`;
 </script>
 
 <div class="container">
