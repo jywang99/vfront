@@ -35,13 +35,13 @@ export function resetAxios() {
   */
 
 /** @typedef
-  * {{ meta: EntryMeta, path: string, files: string[] }}
+  * {{ meta: EntryMeta, path: string, files: string[], tags: Tag[], casts: Cast[], parent: Collection }}
   * Entry
   */
 
 /**
   * @typedef
-  * {{ id: number, name: string, img?: string }}
+  * {{ id: number, name: string, pic?: string }}
   * PickerItemType
   */
 

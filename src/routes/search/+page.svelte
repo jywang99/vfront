@@ -8,20 +8,20 @@
   import ParentPicker from "./ParentPicker.svelte";
   import TagPicker from "./TagPicker.svelte";
   import CastPicker from "./CastPicker.svelte";
-  import Tag from "./tag.svelte";
-  import Cast from "./cast.svelte";
+  import Tag from "$lib/Tag.svelte";
+  import Cast from "$lib/Cast.svelte";
 
   /** @typedef {import('$lib/api').Collection} Collection
-    * @typedef {import('$lib/api').Tag} Tag
-    * @typedef {import('$lib/api').Cast} Cast
+    * @typedef {import('$lib/api').Tag} TagType
+    * @typedef {import('$lib/api').Cast} CastType
     */
 
   /** @typedef
     * {{
     *   entries: import('$lib/api').EntryMeta[],
     *   paging: import('$lib/api').PagingResp,
-    *   casts: Cast[],
-    *   tags: Tag[],
+    *   casts: CastType[],
+    *   tags: TagType[],
     * }} EntrySearch
     */
 
@@ -35,9 +35,9 @@
   let sKeyword = '';
   /** @type {Collection[]} */
   let sParents = [];
-  /** @type {Tag[]} */
+  /** @type {TagType[]} */
   let sTags = [];
-  /** @type {Cast[]} */
+  /** @type {CastType[]} */
   let sCasts = [];
   // pagination
   /** @type {import('$lib/api').PagingOpts} */
