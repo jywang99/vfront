@@ -3,13 +3,13 @@
   import { onMount } from "svelte";
   import { page } from '$app/stores';
   import { goto } from "$app/navigation";
-  import Entry from "./Entry.svelte";
   import Paging from "$lib/Paging.svelte";
   import ParentPicker from "./ParentPicker.svelte";
   import TagPicker from "./TagPicker.svelte";
   import CastPicker from "./CastPicker.svelte";
   import Tag from "$lib/Tag.svelte";
   import Cast from "$lib/Cast.svelte";
+  import EntryWall from "$lib/EntryWall.svelte";
 
   /** @typedef {import('$lib/api').Collection} Collection
     * @typedef {import('$lib/api').Tag} TagType
@@ -199,11 +199,7 @@
 {#if grandTotal > 0}
   <Paging bind:offset={paging.offset} bind:grandTotal bind:pageSize={paging.pageSize} {onOffsetChange} />
 
-  <div class="entries section">
-    {#each entries as entry}
-      <Entry {entry} />
-    {/each}
-  </div>
+  <EntryWall {entries} />
 
   {#if tags && tags.length > 0}
     <div class="tags section">
@@ -229,13 +225,6 @@
 <style>
   #entryForm {
     margin-bottom: 1.5rem;
-  }
-
-  .entries {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 0fr));
-    gap: .5rem;
-    justify-content: center;
   }
 
   .tags {

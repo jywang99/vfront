@@ -9,6 +9,7 @@
   /** @type {Collection[]} */
   let fetched = [];
   let fetching = false;
+  // fetching chosen collections from ids in URL params
   let chosenFetching = false;
 
   let keyword = '';

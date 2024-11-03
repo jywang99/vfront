@@ -15,6 +15,7 @@
     <a href="/">Home</a>
     {#if loggedIn}
       <a href="/search">Search</a>
+      <a href="/collection">Collections</a>
     {/if}
   </nav>
 
