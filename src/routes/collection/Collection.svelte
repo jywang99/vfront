@@ -31,7 +31,7 @@
     <p>{collection.desc}</p>
     <p>Created at: {collection.created}</p>
   </div>
-  <div>
+  <div class="wall">
     <EntryWall {entries} />
   </div>
 </div>
@@ -39,6 +39,10 @@
 <style>
   .collection {
     margin: 1rem;
+  }
+
+  .wall {
+    min-height: 200px;
   }
 </style>
 

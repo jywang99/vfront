@@ -10,6 +10,10 @@
   });
 </script>
 
+<svelte:head>
+    <title>Home</title> 
+</svelte:head>
+
 <h1>Welcome{loggedIn ? `, ${user?.name}` : ''}</h1>
 {#if !loggedIn}
   <a href="/login">Login</a>

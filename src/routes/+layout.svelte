@@ -1,5 +1,10 @@
 <script>
+  import { page } from "$app/stores";
   import { localUser } from "$lib/storable";
+  import NavLink from "./NavLink.svelte";
+
+  let curPath;
+  $: curPath = $page.url.pathname;
 
   /** import("$lib/storable").User */
   let user = null;
@@ -12,10 +17,10 @@
 
 <div class="container">
   <nav>
-    <a href="/">Home</a>
+    <NavLink href="/" {curPath}>Home</NavLink>
     {#if loggedIn}
-      <a href="/search">Search</a>
-      <a href="/collection">Collections</a>
+      <NavLink href="/search/" {curPath}>Search</NavLink>
+      <NavLink href="/collection/" {curPath}>Collections</NavLink>
     {/if}
   </nav>
 

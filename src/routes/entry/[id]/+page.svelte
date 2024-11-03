@@ -43,6 +43,10 @@
   });
 </script>
 
+<svelte:head>
+    <title>{data?.meta.name}</title> 
+</svelte:head>
+
 {#if data !== null}
   <h1>{data.meta.name}</h1>
   <p>{data.meta.desc}</p>

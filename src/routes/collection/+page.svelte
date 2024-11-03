@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import { saxio } from '$lib/api';
   import Paging from '$lib/Paging.svelte';
+  import { onMount } from 'svelte';
   import Collection from './Collection.svelte';
 
   const params = $page.url.searchParams
@@ -22,7 +23,7 @@
   /** @type {number} */
   let grandTotal = 0;
   /** @type {number} */
-  let pageSize = 20;
+  let pageSize = 10;
 
   /** @type {import('$lib/api').Collection[]} */
   let fetched = [];
@@ -55,21 +56,26 @@
       fetching = false;
     });
   };
-  fetchCollections(offset);
-  
+  onMount(() => {
+    fetchCollections(offset);
+  });
 </script>
 
-<h1>Producers</h1>
+<svelte:head>
+    <title>Collections</title> 
+</svelte:head>
 
 <Paging {offset} {grandTotal} {pageSize} onOffsetChange={fetchCollections} />
 
-{#if fetching}
-  <p>Fetching...</p>
-{:else}
-  {#each fetched as collection}
-    <Collection {collection} />
-  {/each}
-{/if}
+<div class="contents">
+  {#if fetching}
+    <p>Fetching...</p>
+  {:else}
+    {#each fetched as collection}
+      <Collection {collection} />
+    {/each}
+  {/if}
+</div>
 
 <Paging {offset} {grandTotal} {pageSize} onOffsetChange={fetchCollections} />
 

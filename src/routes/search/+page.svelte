@@ -184,6 +184,10 @@
   }
 </script>
 
+<svelte:head>
+    <title>Search</title> 
+</svelte:head>
+
 <form id="entryForm">
   <label for="entryKey">Keyword</label>
   <input type="text" id="entryKey" bind:value={sKeyword} />
