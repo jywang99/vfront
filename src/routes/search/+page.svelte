@@ -170,9 +170,7 @@
   }
 
   /** @param {paging} pg */
-  $: {
-    if (paging.offset >= 0) searchEntries(false);
-  }
+  $: if (paging.offset >= 0) searchEntries(false);
 
   function clearSearch() {
     sKeyword = '';

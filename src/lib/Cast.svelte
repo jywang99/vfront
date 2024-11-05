@@ -11,14 +11,19 @@
   let pic;
 
   onMount(() => {
-    if (!cast.pic) return;
+    if (!cast.pic) {
+      pic.src = '/missing.jpg';
+      return;
+    }
+
     saxio?.get(`/gallery/cast?path=${encodeURIComponent(cast.pic)}`, {
       responseType: 'blob',
     }).then((res) => {
       const url = URL.createObjectURL(res.data);
       pic.src = url;
-    }).catch((err) => {
-      console.error(err);
+    }).catch((_) => {
+      console.error('Failed to load image');
+      pic.src = '/missing.jpg';
     });
   })
 </script>
