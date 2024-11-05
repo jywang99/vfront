@@ -49,6 +49,17 @@
   };
   let paging = structuredClone(defaultPaging);
 
+  // search results
+  /** @type {import('$lib/api').EntryMeta[]} */
+  let entries = [];
+  /** @type {import('$lib/api').Cast[]} */
+  let casts = [];
+  /** @type {import('$lib/api').Tag[]} */
+  let tags = [];
+  // pagination
+  let total = 0;
+  let grandTotal = 0;
+
   const params = $page.url.searchParams
   /**
     * @param {string} param
@@ -158,21 +169,9 @@
     }
   }
 
-  // search results
-  /** @type {import('$lib/api').EntryMeta[]} */
-  let entries = [];
-  /** @type {import('$lib/api').Cast[]} */
-  let casts = [];
-  /** @type {import('$lib/api').Tag[]} */
-  let tags = [];
-  // pagination
-  let total = 0;
-  let grandTotal = 0;
-
-  /** @param {number} n */
-  function onOffsetChange(n) {
-    paging.offset = n;
-    searchEntries(false);
+  /** @param {paging} pg */
+  $: {
+    if (paging.offset >= 0) searchEntries(false);
   }
 
   function clearSearch() {
@@ -201,7 +200,7 @@
 </form>
 
 {#if grandTotal > 0}
-  <Paging bind:offset={paging.offset} bind:grandTotal bind:pageSize={paging.pageSize} {onOffsetChange} />
+  <Paging bind:paging={paging} bind:grandTotal />
 
   <EntryWall {entries} />
 
@@ -221,7 +220,7 @@
     </div>
   {/if}
 
-  <Paging bind:offset={paging.offset} bind:grandTotal bind:pageSize={paging.pageSize} {onOffsetChange} />
+  <Paging bind:paging={paging} bind:grandTotal />
 {:else}
   <p>No entries found.</p>
 {/if}

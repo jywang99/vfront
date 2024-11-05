@@ -29,17 +29,15 @@
   let fetched = [];
   let fetching = false;
 
-  const paging = {
+  let paging = {
     desc: true,
     pageSize,
     getTotal: true,
     offset,
   };
-  /** @param {number} newOffset */
-  const fetchCollections = (newOffset) => {
-    offset = newOffset;
-    updateSearchParams('offset', offset.toString());
-    paging.offset = newOffset;
+
+  const fetchCollections = () => {
+    updateSearchParams('offset', paging.offset.toString());
 
     fetching = true;
     saxio?.post('/collection', { 
@@ -56,16 +54,14 @@
       fetching = false;
     });
   };
-  onMount(() => {
-    fetchCollections(offset);
-  });
+  $: if (paging.offset >= 0) fetchCollections();
 </script>
 
 <svelte:head>
     <title>Collections</title> 
 </svelte:head>
 
-<Paging {offset} {grandTotal} {pageSize} onOffsetChange={fetchCollections} />
+<Paging bind:paging bind:grandTotal />
 
 <div class="contents">
   {#if fetching}
@@ -77,5 +73,5 @@
   {/if}
 </div>
 
-<Paging {offset} {grandTotal} {pageSize} onOffsetChange={fetchCollections} />
+<Paging bind:paging bind:grandTotal />
 

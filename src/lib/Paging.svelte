@@ -1,19 +1,18 @@
 <script>
-  /** @type {number} */
-  export let offset;
-  /** @type {number} */
   export let grandTotal;
-  /** @type {number} */
-  export let pageSize;
-  export let radius = 4;
+  /** @type {import('$lib/api').PagingOpts} */
+  export let paging;
 
   /** @type {number} */
   let current; // 1-based
   /** @type {number} */
   let total;
+  // example: ... 3 4 5 6 7 ... (current = 5, radius = 2)
+  /** @type {number} */
+  let radius = 4;
   $: {
-    current = offset / pageSize + 1;
-    total = Math.ceil(grandTotal / pageSize);
+    current = paging.offset / paging.pageSize + 1;
+    total = Math.ceil(grandTotal / paging.pageSize);
   }
 
   let abbrevBefore = false;
@@ -50,11 +49,9 @@
     }
   }
 
-  /** @type {(offset: number) => void} */
-  export let onOffsetChange;
   /** @param {number} pg */
   function onPageChange(pg) {
-    onOffsetChange((pg - 1) * pageSize);
+    paging.offset = (pg - 1) * paging.pageSize;
   }
 </script>
 
