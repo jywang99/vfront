@@ -35,6 +35,11 @@ export function resetAxios() {
   */
 
 /** @typedef
+  * {{ id: number, name: string, desc: string, casts: Cast[], tags: Tag[], parentId: number, thumbStatic: string, thumbDynamic: string[], created: string, updated: string, aired: string }}
+  * EntryJoined
+  */
+
+/** @typedef
   * {{ meta: EntryMeta, path: string, files: string[], tags: Tag[], casts: Cast[], parent: Collection }}
   * Entry
   */

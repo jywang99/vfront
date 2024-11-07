@@ -1,8 +1,9 @@
 <script>
   import { saxio } from '$lib/api';
-  import { onMount } from 'svelte';
+    import Cast from './Cast.svelte';
+    import Tag from './Tag.svelte';
 
-  /** @type {import('$lib/api').EntryMeta} */
+  /** @type {import('$lib/api').EntryJoined} */
   export let entry;
 
   /** @type {HTMLImageElement} */
@@ -16,8 +17,7 @@
   let dynamic = false;
   let dynamicReady = false;
 
-  onMount(() => {
-    if (!entry.thumbStatic) return;
+  $: if (entry.thumbStatic) {
     saxio?.get(`/gallery/thumb?path=${encodeURIComponent(entry.thumbStatic)}`, {
       responseType: 'blob',
     }).then((res) => {
@@ -27,9 +27,13 @@
     }).catch((err) => {
       console.error(err);
     });
-  })
+  }
 
-  $: if (dynamic && !dynamicReady && entry.thumbDynamic) {
+  const loadDynamicThumb = () => {
+    if (!dynamic || dynamicReady || !entry.thumbDynamic) {
+      return;
+    }
+
     entry.thumbDynamic.forEach((path) => {
       saxio?.get(`/gallery/thumb?path=${encodeURIComponent(path)}`, {
         responseType: 'blob',
@@ -45,12 +49,50 @@
       });
     });
   }
+
+  $: if (entry.thumbDynamic) {
+    dynamicReady = false;
+    dynamicUrls = [];
+    loadDynamicThumb();
+  }
+  $: if (dynamic) loadDynamicThumb();
+
+  let tagHover = false;
+  let castHover = false;
+
+  const handleMouseLeave = () => {
+    dynamic = false;
+    tagHover = false;
+    castHover = false;
+  }
 </script>
 
 <a class="entry" href={`/entry/${entry.id}`}>
-  <div class="thumbWrap" on:mouseenter={() => dynamic = true} on:mouseleave={() => dynamic = false} role="region" aria-label="Hoverable region">
-    <img bind:this={staticThumb} class:hidden={dynamic && dynamicReady || !staticReady} alt="thumbStatic" />
+  <div class="thumbWrap" on:mouseenter={() => dynamic = true} on:mouseleave={handleMouseLeave} role="region" aria-label="Hoverable region">
+    <img bind:this={staticThumb} class:hidden={dynamic && dynamicReady || !staticReady} alt="thumbStatic" src='/missing.jpg' />
     <img bind:this={dynamicThumb} class:hidden={!dynamic || !dynamicReady} alt="thumbDynamic" />
+    <div class="hover-icon tag-icon" on:mouseenter={() => {
+      tagHover = true;
+      castHover = false;
+    }} role="tooltip">T</div>
+    <div class="hover-icon cast-icon" on:mouseenter={() => {
+      castHover = true;
+      tagHover = false;
+    }} role="tooltip">C</div>
+    {#if tagHover}
+      <div class="hover-menu">
+        {#each entry.tags as tag}
+          <Tag {tag} />
+        {/each}
+      </div>
+    {/if}
+    {#if castHover}
+      <div class="hover-menu">
+        {#each entry.casts as cast}
+          <Cast {cast} />
+        {/each}
+      </div>
+    {/if}
   </div>
   <p>{entry.name}</p>
 </a>
@@ -60,6 +102,7 @@
     text-decoration: none;
     color: black;
     max-width: 180px;
+    position: relative;
   }
 
   .entry p {
@@ -86,6 +129,37 @@
 
   .hidden {
     display: none;
+  }
+
+  .hover-icon {
+    position: absolute;
+    font-size: 2rem;
+    color: orange;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid orange;
+  }
+
+  .tag-icon {
+    top: 4px;
+    left: 4px;
+  }
+
+  .cast-icon {
+    top: 4px;
+    right: 4px;
+  }
+
+  .hover-menu {
+    position: absolute;
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 </style>
 

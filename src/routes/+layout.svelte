@@ -21,8 +21,8 @@
     {#if loggedIn}
       <NavLink href="/search/" {curPath}>Search</NavLink>
       <NavLink href="/collection/" {curPath}>Collections</NavLink>
-      <NavLink href="/tag/" {curPath}>Tags</NavLink>
       <NavLink href="/cast/" {curPath}>Casts</NavLink>
+      <NavLink href="/tag/" {curPath}>Tags</NavLink>
     {/if}
   </nav>
 

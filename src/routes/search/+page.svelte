@@ -7,8 +7,6 @@
   import ParentPicker from "./ParentPicker.svelte";
   import TagPicker from "./TagPicker.svelte";
   import CastPicker from "./CastPicker.svelte";
-  import Tag from "$lib/Tag.svelte";
-  import Cast from "$lib/Cast.svelte";
   import EntryWall from "$lib/EntryWall.svelte";
 
   /** @typedef {import('$lib/api').Collection} Collection
@@ -101,8 +99,8 @@
     }).then(/** @param {EntryResponse} res */ (res) => {
       const data = res.data;
       entries = data.entries;
-      casts = data.casts;
-      tags = data.tags;
+      if (data.casts) casts = data.casts;
+      if (data.tags) tags = data.tags;
       total = data.entries.length;
 
       // get total count from the first response only
@@ -199,25 +197,7 @@
 
 {#if grandTotal > 0}
   <Paging bind:paging={paging} bind:grandTotal />
-
-  <EntryWall {entries} />
-
-  {#if tags && tags.length > 0}
-    <div class="tags section">
-      {#each tags as tag}
-        <Tag {tag} />
-      {/each}
-    </div>
-  {/if}
-
-  {#if casts && casts.length > 0}
-    <div class="casts section">
-      {#each casts as cast}
-        <Cast {cast} />
-      {/each}
-    </div>
-  {/if}
-
+  <EntryWall bind:entries bind:tags bind:casts />
   <Paging bind:paging={paging} bind:grandTotal />
 {:else}
   <p>No entries found.</p>
@@ -225,20 +205,6 @@
 
 <style>
   #entryForm {
-    margin-bottom: 1.5rem;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .casts {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .section {
     margin-bottom: 1.5rem;
   }
 </style>
