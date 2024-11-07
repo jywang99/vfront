@@ -59,9 +59,9 @@
   // put casts into alpha groups by first letter
   /** @typedef
     * {{ letter: string, tags: import('$lib/api').Cast[] }}
-    * AlphaTag
+    * AlphaCast
     */
-  /** @type {AlphaTag[]} */
+  /** @type {AlphaCast[]} */
   let alphaTags = [];
   $: {
     const casts = fetched;

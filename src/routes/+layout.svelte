@@ -30,11 +30,13 @@
 </div>
 
 <footer>
+  <p>© 2024</p>
 </footer>
 
 <style>
   .container {
     padding: 8px;
+    flex: 1;
   }
 
   nav {
@@ -45,12 +47,13 @@
   }
 
   footer {
-    margin-top: 1rem;
-    padding: 1rem;
-    display: flex;
-    justify-content: center;
+    width: 100%;
     background-color: #f0f0f0;
     min-height: 100px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    text-align: center;
+    box-sizing: border-box;
   }
 </style>
 

@@ -11,10 +11,7 @@
   let pic;
 
   onMount(() => {
-    if (!cast.pic) {
-      pic.src = '/missing.jpg';
-      return;
-    }
+    if (!cast.pic) return; 
 
     saxio?.get(`/gallery/cast?path=${encodeURIComponent(cast.pic)}`, {
       responseType: 'blob',
@@ -23,14 +20,13 @@
       pic.src = url;
     }).catch((_) => {
       console.error('Failed to load image');
-      pic.src = '/missing.jpg';
     });
   })
 </script>
 
 <a href="/search/?casts={cast.id}">
   <p>{cast.name}</p>
-  <img bind:this={pic} alt={cast.name} />
+  <img bind:this={pic} alt={cast.name} src='/missing.jpg' />
 </a>
 
 <style>
@@ -39,6 +35,7 @@
     position: relative;
     width: 100px;
     height: 150px;
+    overflow: hidden;
   }
 
   p {
@@ -51,8 +48,10 @@
   }
 
   img {
+    height: 100%;
     width: 100%;
-    height: auto;
+    object-fit: cover;
+    object-position: center;
   }
 </style>
 
